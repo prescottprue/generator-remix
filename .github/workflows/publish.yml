@@ -1,0 +1,62 @@
+name: NPM Package Publish
+
+on:
+  push:
+    branches:
+      - main
+      - next
+
+concurrency:
+  group: publish-${{ github.ref }}
+
+env:
+  NODE_VERSION: 16.x
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Configure package manager
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm config set '//registry.npmjs.org/:_authToken' ${{ env.NPM_TOKEN }}
+          npm whoami
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Check Lint
+        run: npm run lint
+
+      - name: Run Tests
+        run: |
+          npm run test -- --coverage
+
+      - name: Semantic Release
+        if: ${{ false }}
+        uses: cycjimmy/semantic-release-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branches: |
+            [
+              '+([0-9])?(.{+([0-9]),x}).x',
+              'main',
+              'next',
+              'next-major',
+              {name: 'beta', prerelease: true},
+              {name: 'alpha', prerelease: true}
+            ]
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2

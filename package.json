@@ -1,0 +1,75 @@
+{
+  "name": "generator-remix",
+  "version": "0.0.1",
+  "description": "Yeoman generator for scaffolding remix-run applications",
+  "scripts": {
+    "pretest": "eslint .",
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "engines": {
+    "npm": ">= 4.0.0"
+  },
+  "files": [
+    "generators"
+  ],
+  "main": "generators/index.js",
+  "dependencies": {
+    "yeoman-generator": "^3.1.1",
+    "chalk": "^2.1.0",
+    "yosay": "^2.0.2"
+  },
+  "devDependencies": {
+    "yeoman-test": "^1.7.0",
+    "yeoman-assert": "^3.1.1",
+    "eslint": "^8.9.0",
+    "prettier": "^2.5.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-config-xo": "^0.40.0",
+    "jest": "^27.5.0"
+  },
+  "keywords": [
+    "remix",
+    "scaffolding",
+    "material-ui",
+    "yeoman-generator"
+  ],
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "xo",
+      "prettier"
+    ],
+    "env": {
+      "jest": true,
+      "node": true
+    },
+    "rules": {
+      "prettier/prettier": "error"
+    },
+    "plugins": [
+      "prettier"
+    ]
+  },
+  "author": {
+    "name": "prescottprue",
+    "email": "sprue.dev@gmail.com"
+  },
+  "repository": "prescottprue/generator-remix",
+  "license": "MIT"
+}
